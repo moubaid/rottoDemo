@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+    <script>
+var apikey = "345f6wv756gk6wp8cugvuqcu";
+var baseUrl = "http://api.rottentomatoes.com/api/public/v1.0";
+var count=0;
+// construct the uri with our apikey
+var moviesSearchUrl = baseUrl + '/movies.json?apikey=' + apikey;
+//var query="Black Hawk";
+var query=["The dark knight","MAMA","ROCKY","Black Hawk","Fast and F"];
+var queryi;
+function complete(q)
+{
+	
+	queryi=q.value;
+	$.ajax({
+    url: moviesSearchUrl + '&q=' + encodeURI(queryi),
+    dataType: "jsonp",
+    success: searchCallback
+  });
+}
+
+
+$(document).ready(function() {
+
+  for(var i=0;i<query.length;i++)
+  {// send off the query
+  $.ajax({
+  //var a=query[i];
+    url: moviesSearchUrl + '&q=' + encodeURI(query[i]),
+    dataType: "jsonp",
+    success: searchCallback
+  });}
+});
+
+// callback for when we get back the results
+function searchCallback(data) {
+
+
+ $(document.body).append('Found ' + data.total + ' results for ' + query);
+ var movies = data.movies;
+
+   $(document.body).append('<h1>' + movies[0].title + '</h1>');
+   $(document.body).append('<img src="' + movies[0].posters.thumbnail + '" />');
+   $(document.body).append('<h3>'+ movies[0].year+'</h3>')
+   count=1;
+}
+    </script>
+
+  </head>
+  
+  <body>
+  </body>
+  
+  <form method="get" id="search" onsubmit="complete(); return false;">
+  <input type="text" name="q"/>
+  <input type="text" name="page_limt"/>
+  <input type="text" name="page"/>
+  
+  <input  type="submit"/>
+  
+  </form>
+  
+  <div id="result"></div>
+</html>
