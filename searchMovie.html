@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+    <script>
+var apikey = "345f6wv756gk6wp8cugvuqcu";
+var baseUrl = "http://api.rottentomatoes.com/api/public/v1.0";
+
+// construct the uri with our apikey
+var moviesSearchUrl = baseUrl + '/movies.json?apikey=' + apikey;
+
+var query;
+function complete(q)
+{
+	
+	query=q.value;
+	$.ajax({
+    url: moviesSearchUrl + '&q=' + encodeURI(query),
+    dataType: "jsonp",
+    success: searchCallback
+  });
+}
+
+
+// callback for when we get back the results
+function searchCallback(data) {
+ $("#result").html('Found ' + data.total + ' results for ' + query);
+ var movies = data.movies;
+ $.each(movies, function(index, movie) {
+   $("#result").append('<h1>' + movie.title + '</h1>');
+   $("#result").append('<img src="' + movie.posters.thumbnail + '" width="100px" height="120px;" />');
+    $("#result").append('<h3>'+ movie.year+'</h3>');
+	$("#result").append('<h3>'+movie.id+'</h3>');
+ });
+}
+    </script>
+
+  </head>
+  
+  <body>
+  </body>
+  
+  <form method="get" id="search" onsubmit="complete(q); return false;">
+  <input type="text" name="q"/>
+  <input type="text" name="page_limt"/>
+  <input type="text" name="page"/>
+  
+  <input  type="submit"/>
+  
+  </form>
+  <div id="result"></div>
+</html>
